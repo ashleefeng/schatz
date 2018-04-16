@@ -1,0 +1,3 @@
+1a. samtools faidx ref.fa
+    233806 bp
+1b
