@@ -1,7 +1,9 @@
 #! /usr/bin/env python
 
 """
-Eliminate false positives from pioneer factor prediction by calling PF cofactors, 
+Reports the percentage of time a predicted pioneer occurs with at least one of the other target pioneers.
+
+Helps eliminate false positives from pioneer factor prediction by finding PF cofactors, 
 or TFs that bind only in the presence of at least one PF.
 
 by Xinyu Feng, April 14 2018
@@ -16,9 +18,13 @@ if len(sys.argv) == 1:
 	quit()
 
 """
-counts the number of binding and cobinding events for each target motif
+counts the number of binding and cobinding events for each target motif.
+binding   := matrix[region][motif] > 0
+cobinding := matrix[region][motif] > 0 and matrix[region][another motif] > 0
 
-in: list of numpy arrays
+in:  matrix_list: list of numpy arrays 
+                  (filtered matrices containing number of matches to targets)
+     num_targets: total number of predicted targets
 out: id2cb: column # -> # of co-binding events
      id2total: column # -> # of total binding events
 """
@@ -68,7 +74,7 @@ def cobinding(matrix_list, num_targets):
 target_set = set()
 target_list = []
 id2name = {} # ex. MA0139.1	-> CTCF
-num_targets = 0
+num_targets = 0 # number of targets to analyze cobinding
 
 targets_file = open(sys.argv[2])
 for line in targets_file:
